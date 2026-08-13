@@ -1,40 +1,47 @@
 
-print(f"number-commanator")
-text = None
-digitwords_to_replace = {}
+print(f"NUMBER-COMMONATOR\n")
+numbers_to_commanate = {}
 
-# GET THE digitwords_to_replace
+# GET THE numbers_to_commanate
 with open("original/text.txt", "r") as file:
-
     for line in file:
-        for word in line.split(" "):
-            if word.isdigit():
-                if int(word) > 999:
 
-                    # digitwords_to_replace
-                    digitword_backwards = ""
-                    index_counter = 0
+        i_start = -1
+        for index, char in enumerate(line):
+            if char.isdigit():
+                if i_start == -1:
+                    # start new number
+                    i_start = index
+            else:
+                if i_start != -1:
 
-                    for i in range(len(word)-1, -1, -1):
+                    # end new number
+                    number = line[i_start:index]
+                    i_start = -1
 
-                        index_counter += 1
+                    # add commas
+                    print(f"====> FOUND: {number}")
+                    numberfixed_backwards = ""
+                    d_counter = 0
+                    for d in range(len(number)-1, -1, -1):
+                        numberfixed_backwards += number[d]
+                        d_counter += 1
+                        if d_counter >= 3 and d != 0:
+                            numberfixed_backwards += ","
+                            d_counter = 0
+                    numberfixed = "".join(reversed(numberfixed_backwards))
+                    numbers_to_commanate[number] = numberfixed
+                    print(numberfixed)
 
-                        digitword_backwards += f"{word[i]}" # the number
-                        if index_counter == 3 and i > 0:
-                            digitword_backwards += f"," # the comma
-                            index_counter = 0
-                    
-                    digitword = "".join(reversed(digitword_backwards))
-                    digitwords_to_replace[word] = digitword # add the digitword
-                    print(f"✓ found {word} vs. {digitword}")
-
-# USE THE digitwords_to_replace
+# USE THE numbers_to_commanate
+filecontent = ""
 with open("original/text.txt", "r") as file:
-    text = file.read() # get text
-
-for digitword, replacement in digitwords_to_replace.items():
-    text = text.replace(digitword, replacement) # replace the digitword in text
-
+    filecontent = file.read()
+text = ""
+for item in filecontent.split(" "):
+    if item in numbers_to_commanate:
+        item = numbers_to_commanate[item]
+    text += f"{item} "
 with open("edited/text.txt", "w") as file:
-    file.write(text) # file with the edited text
-    print("REPLACED TEXT!")
+    file.write(text)
+print("\nREPLACED TEXT!")
