@@ -22,6 +22,7 @@ with open("original/text.txt", "r") as file:
                     digit_index += 1
                     digit_char = text[digit_index]
                 digit_indexend = digit_index
+                print(f"----> found {digitword}")
                 # commonate digitword
                 digitword_backwards = ""
                 i_counter = 0
@@ -33,7 +34,7 @@ with open("original/text.txt", "r") as file:
                         i_counter = 0
                 digitword = "".join(reversed(digitword_backwards))
                 text_commanated += digitword # ADD DIGITWORD
-                print(f"✓ found {digitword}")
+                print(f"{digitword}")
 
 with open("edited/text.txt", "w") as file:
     file.write(text_commanated)
